@@ -10,15 +10,9 @@ from django.core import serializers
 from django.core.mail import send_mail
 from django.conf import settings
 
-
 from .models import *
 from group.models import NetworkerGroup
 from .forms import *
-
-
-def group_specific_to_user():
-    login_user = NetworkerUser.objects.get(pk=request.user.id)
-    group_list = login_user.membership_list.all().prefetch_related()
 
 
 # -----------------------------------------------------------------------index
@@ -48,9 +42,8 @@ class ListingPhone(ListView):
     section = 'Phone'
     queryset = UserPhone.objects.select_related('user_id').all()
 
+    # foreign key category to networker_user for login user
     def get_queryset(self):
-        # import pdb; pdb.set_trace()
-        # return UserPhone.objects.filter(user_id=self.request.user.networkeruser)
         return self.queryset.filter(user_id=self.request.user.networkeruser)
 
 
@@ -61,9 +54,8 @@ class ListingEmail(ListView):
     section = 'Alternate Email'
     queryset = UserEmail.objects.select_related('user_id').all()
 
+    # foreign key category to networker_user for login user
     def get_queryset(self):
-        # import pdb; pdb.set_trace()
-        # return UserEmail.objects.filter(user_id=self.request.user.networkeruser)
         return self.queryset.filter(user_id=self.request.user.networkeruser)
 
 
@@ -74,8 +66,8 @@ class ListingAddress(ListView):
     section = 'Address'
     queryset = UserAddress.objects.select_related('user_id').all()
 
+    # foreign key category to networker_user for login user
     def get_queryset(self):
-        # import pdb; pdb.set_trace()
         return self.queryset.filter(user_id=self.request.user.networkeruser)
 
 
@@ -86,8 +78,8 @@ class ListingSocialMedia(ListView):
     section = 'Social Media'
     queryset = UserSocialMedia.objects.select_related('user_id').all()
 
+    # foreign key category to networker_user for login user
     def get_queryset(self):
-        # import pdb; pdb.set_trace()
         return self.queryset.filter(user_id=self.request.user.networkeruser)
 
 
@@ -98,8 +90,8 @@ class ListingJob(ListView):
     section = 'Job Profile'
     queryset = UserJob.objects.select_related('user_id').all()
 
+    # foreign key category to networker_user for login user
     def get_queryset(self):
-        # import pdb; pdb.set_trace()
         return self.queryset.filter(user_id=self.request.user.networkeruser)
 
 
@@ -110,8 +102,8 @@ class ListingSkill(ListView):
     section = 'Skill Profile'
     queryset = UserSkill.objects.select_related('user_id').all()
 
+    # foreign key category to networker_user for login user
     def get_queryset(self):
-        # import pdb; pdb.set_trace()
         return self.queryset.filter(user_id=self.request.user.networkeruser)
 
 
@@ -119,12 +111,12 @@ class ListingSkill(ListView):
 class UserUpdateMain(UpdateView):
     """ Update auth-user details for a user """
     model = User
-    fields = ['username', 'first_name', 'last_name', 'email', 'is_active']
-    # success_url = '.'
-    section = "Main"
+    fields = '__all__'
     title = 'update'
+    section = "Main"
     button = 'Update'
 
+    # successful form data goes back to the relevant section
     def get_success_url(self):
         return reverse('update_main', kwargs={
             'pk': self.object.pk,
@@ -134,13 +126,12 @@ class UserUpdateMain(UpdateView):
 class UserUpdateAdditional(UpdateView):
     """ Update networker user_extension details for a user except image """
     model = NetworkerUser
-    # fields = '__all__'
-    fields = ['relationship_to_group', 'nickname', 'website', 'place_of_birth', 'date_of_birth']
-    # success_url = '/users/'
-    section = 'Additional'
+    fields = '__all__'
     title = 'update'
+    section = 'Additional'
     button = 'Update'
 
+    # successful form data goes back to the relevant section
     def get_success_url(self):
         return reverse('update_additional', kwargs={
             'pk': self.object.pk,
@@ -150,32 +141,16 @@ class UserUpdateAdditional(UpdateView):
 class UserUpdateImage(UpdateView):
     """ Update networker user_extension image user """
     model = NetworkerUser
-    # fields = '__all__'
-    fields = ['profile_image']
-    # success_url = '/users/'
-    section = 'Profile Image'
+    fields = '__all__'
     title = 'update'
+    section = 'Profile Image'
     button = 'Update'
 
+    # successful form data goes back to the relevant section
     def get_success_url(self):
         return reverse('update_image', kwargs={
             'pk': self.object.pk,
         })
-
-
-# class UserUpdateMembership(UpdateView):
-#     """ Update membership details for a user """
-#     model = NetworkerUser
-#     fields = ['membership_list']
-#     # success_url = '/users/'
-#     section = "Membership"
-#     title = 'update'
-#     button = 'Update'
-
-#     def get_success_url(self):
-#         return reverse('update_membership', kwargs={
-#             'pk': self.object.pk,
-#         })
 
 
 class UserUpdatePhone(UpdateView):
@@ -186,13 +161,12 @@ class UserUpdatePhone(UpdateView):
         return UserPhone.objects.get(pk=self.kwargs['phone'])
 
     model = UserPhone
-    # fields = '__all__'
-    fields = ['phone_category', 'country_code', 'phone_number', 'remove']
-    # success_url = '/users/'
-    section = "Phone"
+    fields = '__all__'
     title = 'update'
+    section = "Phone"
     button = 'Update'
 
+    # successful form data goes back to the relevant list
     def get_success_url(self):
         return reverse('listing_phone', kwargs={
             'pk': self.object.user_id.pk,
@@ -207,13 +181,12 @@ class UserUpdateEmail(UpdateView):
         return UserEmail.objects.get(pk=self.kwargs['email'])
 
     model = UserEmail
-    # fields = '__all__'
-    fields = ['email_category', 'email', 'remove']
-    # success_url = '/users/'
-    section = "Alternate Email"
+    fields = '__all__'
     title = 'update'
+    section = "Alternate Email"
     button = 'Update'
 
+    # successful form data goes back to the relevant list
     def get_success_url(self):
         return reverse('listing_email', kwargs={
             'pk': self.object.user_id.pk,
@@ -228,13 +201,12 @@ class UserUpdateAddress(UpdateView):
         return UserAddress.objects.get(pk=self.kwargs['address'])
 
     model = UserAddress
-    # fields = '__all__'
-    fields = ['address_category', 'street_address_1', 'street_address_2', 'city_town', 'state_province', 'postal_code', 'country', 'remove']
-    # success_url = '/users/'
-    section = "Address"
+    fields = '__all__'
     title = 'update'
+    section = "Address"
     button = 'Update'
 
+    # successful form data goes back to the relevant list
     def get_success_url(self):
         return reverse('listing_address', kwargs={
             'pk': self.object.user_id.pk,
@@ -249,13 +221,12 @@ class UserUpdateSocialMedia(UpdateView):
         return UserSocialMedia.objects.get(pk=self.kwargs['social_media'])
 
     model = UserSocialMedia
-    # fields = '__all__'
-    fields = ['social_media_category', 'social_media_url', 'remove']
-    # success_url = '/users/'
-    section = "Social Media"
+    fields = '__all__'
     title = 'update'
+    section = "Social Media"
     button = 'Update'
 
+    # successful form data goes back to the relevant list
     def get_success_url(self):
         return reverse('listing_social_media', kwargs={
             'pk': self.object.user_id.pk,
@@ -270,13 +241,12 @@ class UserUpdateJob(UpdateView):
         return UserJob.objects.get(pk=self.kwargs['job'])
 
     model = UserJob
-    # fields = '__all__'
-    fields = ['job_category', 'title', 'description', 'company_name', 'state_province', 'country', 'is_current', 'year_started', 'year_ended', 'remove']
-    # success_url = '/users/'
-    section = "Job Profile"
+    fields = '__all__'
     title = 'update'
+    section = "Job Profile"
     button = 'Update'
 
+    # successful form data goes back to the relevant list    
     def get_success_url(self):
         return reverse('listing_job', kwargs={
             'pk': self.object.user_id.pk,
@@ -291,13 +261,12 @@ class UserUpdateSkill(UpdateView):
         return UserSkill.objects.get(pk=self.kwargs['skill'])
 
     model = UserSkill
-    # fields = '__all__'
-    fields = ['skill_category', 'description', 'remove']
-    # success_url = '/users/'
-    section = "Skill Profile"
+    fields = '__all__'
     title = 'update'
+    section = "Skill Profile"
     button = 'Update'
 
+    # successful form data goes back to the relevant list
     def get_success_url(self):
         return reverse('listing_skill', kwargs={
             'pk': self.object.user_id.pk,
@@ -308,18 +277,18 @@ class UserUpdateSkill(UpdateView):
 class CreatePhone(CreateView):
     """ Creates a phone number for user """
     model = UserPhone
-    # fields = '__all__'
-    fields = ['phone_category', 'country_code', 'phone_number']
-    # success_url = '/'
+    fields = '__all__'
     title = 'add'
     section = 'Add Phone'
     button = 'Add'
 
+    # sets the user_id form field with login user username
     def get_initial(self):
         return {
             'user_id': self.request.user
         }
 
+    # successful form data goes back to the relevant list
     def get_success_url(self):
         return reverse('listing_phone', kwargs={
             'pk': self.object.user_id.pk,
@@ -329,18 +298,18 @@ class CreatePhone(CreateView):
 class CreateEmail(CreateView):
     """ Creates a email for user """
     model = UserEmail
-    # fields = '__all__'
-    fields = ['email_category', 'email']
-    # success_url = '/users/'
+    fields = '__all__'
     title = 'add'
     section = 'Add Email'
     button = 'Add'
 
+    # sets the user_id form field with login user username
     def get_initial(self):
         return {
             'user_id': self.request.user
         }
 
+    # successful form data goes back to the relevant list
     def get_success_url(self):
         return reverse('listing_email', kwargs={
             'pk': self.object.user_id.pk,
@@ -350,18 +319,18 @@ class CreateEmail(CreateView):
 class CreateAddress(CreateView):
     """ Creates a address for user """
     model = UserAddress
-    # fields = '__all__'
-    fields = ['address_category', 'street_address_1', 'street_address_2', 'city_town', 'state_province', 'postal_code', 'country']
-    # success_url = '/users/'
+    fields = '__all__'
     title = 'add'
     section = 'Add Address'
     button = 'Add'
 
+    # sets the user_id form field with login user username
     def get_initial(self):
         return {
             'user_id': self.request.user
         }
 
+    # successful form data goes back to the relevant list
     def get_success_url(self):
         return reverse('listing_address', kwargs={
           'pk': self.object.user_id.pk,
@@ -371,18 +340,18 @@ class CreateAddress(CreateView):
 class CreateSocialMedia(CreateView):
     """ Creates a social media for user """
     model = UserSocialMedia
-    # fields = '__all__'
-    fields = ['social_media_category', 'social_media_url']
-    # success_url = '/users/'
+    fields = '__all__'
     title = 'add'
     section = 'Add Social Media'
     button = 'Add'
 
+    # sets the user_id form field with login user username
     def get_initial(self):
         return {
             'user_id': self.request.user
         }
 
+    # successful form data goes back to the relevant list
     def get_success_url(self):
         return reverse('listing_social_media', kwargs={
           'pk': self.object.user_id.pk,
@@ -392,18 +361,18 @@ class CreateSocialMedia(CreateView):
 class CreateJob(CreateView):
     """ Creates a job for user """
     model = UserJob
-    # fields = '__all__'
-    fields = ['job_category', 'title', 'description', 'company_name', 'state_province', 'country', 'is_current', 'year_started', 'year_ended']
-    # success_url = '/users/'
+    fields = '__all__'
     title = 'add'
     section = 'Add Job'
     button = 'Add'
 
+    # sets the user_id form field with login user username
     def get_initial(self):
         return {
             'user_id': self.request.user
         }
 
+    # successful form data goes back to the relevant list
     def get_success_url(self):
         return reverse('listing_job', kwargs={
           'pk': self.object.user_id.pk,
@@ -413,18 +382,18 @@ class CreateJob(CreateView):
 class CreateSkill(CreateView):
     """ Creates a skill for user """
     model = UserSkill
-    # fields = '__all__'
-    fields = ['skill_category', 'description']
-    # success_url = '/users/'
+    fields = '__all__'
     title = 'add'
     section = 'Add Skill'
     button = 'Add'
 
+    # sets the user_id form field with login user username
     def get_initial(self):
         return {
             'user_id': self.request.user
         }
 
+    # successful form data goes back to the relevant list
     def get_success_url(self):
         return reverse('listing_skill', kwargs={
           'pk': self.object.user_id.pk,
@@ -474,15 +443,7 @@ def map(request):
 
             lst.append(dict)
 
-        # print(lst)
-        # print(dict["5"]["first_name"])
-        # print(dict)
         json.dump(lst, out, indent=4)
-
-    # # write json file directly from the UserAddress model for map api
-    # with open("static/ajax/user_address.json", "w") as out:
-    #     json_serializer = serializers.get_serializer('json')()
-    #     json_serializer.serialize(UserAddress.objects.select_related().all(), fields=('user_id', 'address_category_id', 'city_town', 'state_province', 'latitude_api','longitude_api', 'first_name'), stream=out, indent=4)
 
     return render(request, 'user/map.html', {})
 
@@ -619,14 +580,6 @@ def user_login(request):
 
 
 @login_required
-def restricted(request):
-    """ Restricting Access with a Decorator """
-    return HttpResponse("Since you are logged in, you can see this text!")
-
-
-# Use the login_required() decorator to ensure only those logged in can
-# access the view.
-@login_required
 def user_logout(request):
     """ Logout functionality """
     # Since we know the user is logged in, we can now just log them out
@@ -643,10 +596,6 @@ def invite(request):
 
     form = InviteForm(request.POST or None)
     if form.is_valid():
-        # print(form.cleaned_data)
-        # for key in form.cleaned_data:
-        #     # print(key)
-        #     print(form.cleaned_data.get(key))
 
         form_email = form.cleaned_data.get('email')
         form_first_name = form.cleaned_data.get('first_name')
@@ -674,167 +623,3 @@ def invite(request):
 
     return render(request, "user/invite.html", context)
 
-
-# ----------------------------------------------------------------------unused
-# def ListingUser(request, pk):
-#     """ List of all users for a login user group """
-#     networkeruser_list = NetworkerUser.objects.filter(membership_list=pk)
-#     user_group = pk
-#     return render(request, 'user/user_list.html', {'networkeruser_list': networkeruser_list, 'user_group': user_group})
-
-
-# @login_required
-# def UserProfile(request, pk, user_pk):
-#     """ Details of a user """
-#     # """ is_staff: List of all users """
-#     # if request.user.is_authenticated() and request.user.is_staff:
-#     # print(NetworkerUser.objects.all())
-#     # for networker_user in NetworkerUser.objects.all():
-#     #     print(networker_user.user_extension.first_name)
-#     # users = NetworkerUser.objects.all()
-#     # return render(request, 'user/user_profile.html', {'users': users})
-#     # else:
-#     #     return HttpResponse("Unauthorized Access!")
-
-#     member = get_object_or_404(NetworkerUser, id=user_pk)
-#     user_group = pk
-#     return render(request, 'user/user_profile.html', {'member': member, 'user_group': user_group})
-
-# @login_required
-# def test_ajax(request):
-#     """ Write JSON file for UserAddress """
-#     # with open("ajax/user_address.json", "w") as out:
-#     #     json_serializer = serializers.get_serializer('json')()
-#     #     json_serializer.serialize(UserAddress.objects.all(), fields=('first_name', 'user_id', 'city_town', 'state_province', 'latitude_api','longitude_api'), stream=out)
-
-#     # all_objects = list(NetworkerUser.objects.all()) + list(UserAddress.objects.all())
-#     # data = serializers.serialize('json', all_objects, fields=('first_name', 'user_id', 'latitude_api','longitude_api'))
-    
-
-
-#     # Have address get firstName, lastName, profile, address
-#     # address_id : user_id
-#     # user = NetworkerUser.get_object(id=user_id).user_extension
-
-#     # NetworkUser.objects.all()prefetch_related('NetworkerUser__User')
-
-#     # all_objects = list(UserAddress.objects.filter(user_id__user_extension__first_name="Michael"))
-
-#     all_objects = NetworkerUser.objects.all().prefetch_related('user_extension')
-#     data = serializers.serialize('json', all_objects, indent=4)
-
-#     # data = serializers.serialize('json', NetworkerUser.objects.all(), fields=('user_id', 'latitude_api','longitude_api'))
-#     # return HttpResponse(json.dumps(data), content_type = 'application/json')
-#     return HttpResponse(data)
-
-
-# class DeletePhone(DeleteView):
-#     model = UserPhone
-#     success_url = '/users/'
-#     section = "Confirm"
-#     button = "delete"
-
-
-# class DeleteEmail(DeleteView):
-#     model = UserEmail
-#     success_url = '/users/'
-#     section = "Confirm"
-#     button = "delete"
-
-
-# class DeleteAddress(DeleteView):
-#     model = UserAddress
-#     success_url = '/users/'
-#     section = "Confirm"
-#     button = "delete"
-
-# class UserDelete(DeleteView):
-#     model = NetworkerUser
-#     success_url = '/users/'
-#     section = "Confirm Delete"
-#     button = "delete"
-
-#     def get_success_url(self):
-#         return reverse('user_detail', kwargs={
-#             'pk': self.object.pk,
-#         })
-
-
-# def user_listing(request):
-#     """ Simple list of all users """
-
-#     users = NetworkerUser.objects.all()
-#     return render(request, 'user/user_listing.html', {'users': users})
-
-
-# class UpdateContactView(UpdateView):
-#     model = NetworkerUser
-#     template_name = 'user_edit.html'
-
-#     def get_success_url(self):
-#         return reverse('user_listing')
-
-#     def get_context_data(self, **kwargs):
-#         context = super(UpdateContactView, self).get_context_data(**kwargs)
-#         context['action'] = reverse('user-edit', kwargs={'pk': self.get_object().id})
-#         return context
-
-
-# def user_detail_main(request, pk):
-#     """ Details of a user section=MAIN """
-#     user = get_object_or_404(NetworkerUser, pk=pk)
-#     return render(request, 'user/user_detail_main.html', {'user': user})
-
-
-# def user_detail_main_edit(request, pk):
-#     """ Update user section=MAIN """
-#     user = get_object_or_404(NetworkerUser, pk=pk)
-#     if request.method == "POST":
-#         form = UserDetailMainForm(request.POST, user=request.user)
-#         if form.is_valid():
-#             user = form.save()
-#             return redirect('views.user_detail', pk=NetworkerUser.post)
-
-#     else:
-#         form = UserDetailMainForm(user=request.user)
-
-#     return render(request, 'user/user_detail_main_edit.html', {'form': form})
-
-
-# def user_new(request):
-#     """ Makes a new user profile """
-#     if request.method == "POST":
-#         print(request.POST, 'before validation')
-#         form = UserNewForm(request.POST or None)
-
-#         if form.is_valid():
-#             updated_data = form.save(commit=False)
-
-#             updated_data.save() # actually saves it
-#             print(updated_data, "after validation")
-#             return redirect('/users/', pk=updated_data.pk)
-
-#     else:
-#         form = UserNewForm()
-
-#     return render(request, 'user/user_new.html', {'form': form})
-
-
-# def user_edit(request, pk):
-#     """ Makes a new user profile """
-#     updated_data = get_object_or_404(Updated_Data, pk=pk)
-#     if request.method == "POST":
-#         print(request.POST, 'before validation')
-#         form = UserNewForm(request.POST or None, instance=updated_data)
-
-#         if form.is_valid():
-#             updated_data = form.save(commit=False)
-
-#             updated_data.save() # actually saves it
-#             print(updated_data, "after validation")
-#             return redirect('/users/', pk=updated_data.pk)
-
-#     else:
-#         form = UserNewForm(instance=updated_data)
-
-#     return render(request, "user/user_new.html", {'form': form})

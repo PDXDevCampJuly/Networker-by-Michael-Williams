@@ -24,9 +24,11 @@ class NetworkerUser(models.Model):
     place_of_birth = models.CharField(max_length=255, blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
 
+    # reorders admin user list by id
     class Meta:
         ordering = ['id', ]
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return "[{}] {}-{} {}".format(self.user_extension.id, self.user_extension.username, self.user_extension.first_name, self.user_extension.last_name)
 
@@ -36,6 +38,7 @@ class PhoneCategory(models.Model):
     """ Helper table for User_Phone """
     phone_category = models.CharField(max_length=255)
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return self.phone_category
 
@@ -49,6 +52,7 @@ class UserPhone(models.Model):
     phone_number = models.CharField(max_length=255)
     remove = models.BooleanField(default=False)
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return "{}, {} ({})".format(self.user_id, self.phone_number, self.phone_category_id)
 
@@ -57,6 +61,7 @@ class EmailCategory(models.Model):
     """ Helper table for User_Email """
     email_category = models.CharField(max_length=255)
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return self.email_category
 
@@ -69,6 +74,7 @@ class UserEmail(models.Model):
     email = models.EmailField()
     remove = models.BooleanField(default=False)
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return "{}, {} ({}) ".format(self.user_id, self.email, self.email_category_id)
 
@@ -77,6 +83,7 @@ class AddressCategory(models.Model):
     """ Helper table for User_Address """
     address_category = models.CharField(max_length=255)
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return self.address_category
 
@@ -96,6 +103,7 @@ class UserAddress(models.Model):
     longitude_api = models.FloatField()
     remove = models.BooleanField(default=False)
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return "{}, {}, {}, {} ({})".format(self.user_id, self.street_address_1, self.postal_code, self.country, self.address_category_id)
 
@@ -104,6 +112,7 @@ class SocialMediaCategory(models.Model):
     """ Helper table for User_Social_Media """
     social_media_category = models.CharField(max_length=255)
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return self.social_media_category
 
@@ -116,6 +125,7 @@ class UserSocialMedia(models.Model):
     social_media_url = models.URLField()
     remove = models.BooleanField(default=False)
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return "{}, {} ({})".format(self.user_id, self.social_media_url, self.social_media_category_id)
 
@@ -124,6 +134,7 @@ class JobCategory(models.Model):
     """ Helper table for User_Job """
     job_category = models.CharField(max_length=255)
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return self.job_category
 
@@ -143,6 +154,7 @@ class UserJob(models.Model):
     year_ended = models.DateField(default=timezone.now)
     remove = models.BooleanField(default=False)
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return "{}, {}, current={} [{}]".format(self.user_id, self.company_name, self.is_current, self.job_category_id)
 
@@ -151,6 +163,7 @@ class EducationCategory(models.Model):
     """ Helper table for User_Education """
     education_category = models.CharField(max_length=255)
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return self.education_category
 
@@ -168,6 +181,7 @@ class UserEducation(models.Model):
     year_ended = models.DateField(default=timezone.now)
     remove = models.BooleanField(default=False)
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return "{}, {}, passed={} ({})".format(self.user_id, self.school_name, self.is_completed, self.education_category_id)
 
@@ -176,6 +190,7 @@ class SkillCategory(models.Model):
     """ Helper table for User_Skill """
     skill_category = models.CharField(max_length=255)
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return self.skill_category
 
@@ -188,5 +203,8 @@ class UserSkill(models.Model):
     description = models.TextField(blank=True)
     remove = models.BooleanField(default=False)
 
+    # converts admin default admin text to custom text
     def __str__(self):
         return "{}, {} ({})".format(self.user_id, self.skill_description, self.skill_category_id)
+
+

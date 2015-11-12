@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import *
 
+
 # --------------------------------------------------admin inline NetworkerUser
 class CategoriesInline_1(admin.StackedInline):
     model = UserAddress
@@ -49,7 +50,6 @@ class UsersAdmin(admin.ModelAdmin):
         CategoriesInline_7,
     ]
 
-# Register your models here.
 # ---------------------------------------------------------------NetworkerUser
 admin.site.register(NetworkerUser, UsersAdmin)
 
