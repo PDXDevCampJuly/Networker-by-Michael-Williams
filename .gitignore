@@ -15,11 +15,8 @@ __pycache__/
 local_settings.py
 
 
+### AJAX ###
+############
 *.json
 !spec/*.json
 
-
-### Heroku ###
-##############
-venv
-*.pyc
