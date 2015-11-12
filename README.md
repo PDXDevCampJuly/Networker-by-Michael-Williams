@@ -6,13 +6,15 @@
 
 * Python 3.5
 * Django 1.8
-* Postgres App
+* PostgreSQL
 * JavaScript
 * jQuery
 * Bootstrap 3
 * Bootswatch Flatly
 * Sublime Text 2
 * Google Maps API
+* Django Registration Redux
+* Django Crispy Forms
 
 ## Prerequisites
 
