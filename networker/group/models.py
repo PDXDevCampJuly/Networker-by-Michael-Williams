@@ -25,37 +25,3 @@ class NetworkerGroup(models.Model):
 	def __str__(self):
 		return self.name
 
-
-# ----------------------------------------------------------------------unused
-# class GroupUser(models.Model):
-# 	""" Relationship table for message system and user """
-# 	group_id = models.ForeignKey(NetworkerGroup)
-# 	user_id = models.ForeignKey(User)
-
-# 	last_message_dateTime = models.DateTimeField(auto_now_add=False, auto_now=True)
-
-
-# class MessageSystemTopic(models.Model):
-# 	""" Topic table for message system """
-# 	group_id = models.ForeignKey(NetworkerGroup)
-# 	originator_id = models.ForeignKey(GroupUser)
-# 	topic_name = models.CharField(max_length=255)
-# 	topic_description = models.TextField()
-# 	created_dateTime = models.DateTimeField(auto_now_add=True, auto_now=False)
-
-
-# class MessageSystemTopicTag(models.Model):
-# 	""" Topic Tag table for the message system """
-# 	message_system_topic_tag_id = models.ForeignKey(MessageSystemTopic)
-# 	tag = models.CharField(max_length=255, blank=True)
-
-
-# class MessageSystemMessage(models.Model):
-# 	""" Message table for the message system """
-# 	message_system_topic_id = models.ForeignKey(MessageSystemTopic)
-# 	group_user_id = models.ForeignKey(GroupUser)
-# 	message = models.TextField()
-# 	created_dateTime = models.DateTimeField(auto_now_add=True, auto_now=False)
-
-
-
