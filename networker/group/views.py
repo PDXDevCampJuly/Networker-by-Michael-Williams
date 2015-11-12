@@ -16,7 +16,6 @@ from user.models import NetworkerUser
 @login_required
 def GroupProfile(request, pk):
 	""" Details of a group """
-
 	profile = get_object_or_404(NetworkerGroup, pk=pk)
 	user_group = pk
 	return render(request, 'group/group_profile.html', {'profile': profile, 'user_group': user_group})
@@ -27,8 +26,8 @@ class GroupUpdateAbout(UpdateView):
     """ Update auth-group details for a login user group except image """
     model = NetworkerGroup
     fields = ['name', 'description', 'welcome_message', 'website', 'organizer']
-    section = "About"
     title = 'update'
+    section = "About"
     button = 'Update'
 
     def get_success_url(self):
@@ -41,8 +40,8 @@ class GroupUpdateImage(UpdateView):
     """ Update auth-group image for a login user group """
     model = NetworkerGroup
     fields = ['profile_image']
-    section = "Profile Image"
     title = 'update'
+    section = "Profile Image"
     button = 'Update'
 
     def get_success_url(self):
