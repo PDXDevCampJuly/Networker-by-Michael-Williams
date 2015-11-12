@@ -30,6 +30,7 @@ class GroupUpdateAbout(UpdateView):
     section = "About"
     button = 'Update'
 
+    # successful form data goes back to the relevant section
     def get_success_url(self):
         return reverse('update_about_group', kwargs={
             'pk': self.object.pk,
@@ -44,6 +45,7 @@ class GroupUpdateImage(UpdateView):
     section = "Profile Image"
     button = 'Update'
 
+    # successful form data goes back to the relevant section
     def get_success_url(self):
         return reverse('update_image_group', kwargs={
             'pk': self.object.pk,

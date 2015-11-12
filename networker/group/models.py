@@ -19,9 +19,11 @@ class NetworkerGroup(models.Model):
 	website = models.URLField(blank=True)
 	created_dateTime = models.DateTimeField(auto_now_add=True, auto_now=False)
 
+    # reorders admin user list by id
 	class Meta:
 		ordering = ['id',]
 		
+    # converts admin default admin text to custom text
 	def __str__(self):
 		return self.name
 
