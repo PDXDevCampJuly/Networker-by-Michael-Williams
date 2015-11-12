@@ -44,6 +44,3 @@ urlpatterns = [
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-
-    # ------------------------------------------------------------------unused
-    # url(r'^ajax/$', 'user.views.test_ajax', name='test_ajax'),
