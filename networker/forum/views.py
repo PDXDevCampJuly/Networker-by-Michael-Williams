@@ -45,6 +45,7 @@ class ThreadUpdate(UpdateView):
     title = 'update'
     button = 'Update'
 
+    # successful form data goes back to the relevant list
     def get_success_url(self):
         return reverse('thread_list', kwargs={
             'thread': self.kwargs['forum'],
@@ -53,6 +54,7 @@ class ThreadUpdate(UpdateView):
 
 # ----------------------------------------------------------------------create
 class CreateThread(CreateView):
+    """ !Under Construction! """
     """ Creates a thread for a forum """
     model = Thread
     fields = '__all__'
