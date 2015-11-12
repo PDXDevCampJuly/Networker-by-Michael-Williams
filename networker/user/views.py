@@ -111,7 +111,7 @@ class ListingSkill(ListView):
 class UserUpdateMain(UpdateView):
     """ Update auth-user details for a user """
     model = User
-    fields = '__all__'
+    fields = ['username', 'first_name', 'last_name', 'email', 'is_active']
     title = 'update'
     section = "Main"
     button = 'Update'
@@ -126,7 +126,7 @@ class UserUpdateMain(UpdateView):
 class UserUpdateAdditional(UpdateView):
     """ Update networker user_extension details for a user except image """
     model = NetworkerUser
-    fields = '__all__'
+    fields = ['relationship_to_group', 'nickname', 'website', 'place_of_birth', 'date_of_birth']
     title = 'update'
     section = 'Additional'
     button = 'Update'
@@ -141,7 +141,7 @@ class UserUpdateAdditional(UpdateView):
 class UserUpdateImage(UpdateView):
     """ Update networker user_extension image user """
     model = NetworkerUser
-    fields = '__all__'
+    fields = ['profile_image']
     title = 'update'
     section = 'Profile Image'
     button = 'Update'
