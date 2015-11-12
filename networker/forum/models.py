@@ -16,6 +16,7 @@ class Forum(models.Model):
 
 	def num_threads(self):
 		return self.thread_set.count()
+		
 
 class Thread(models.Model):
 	""" Threads for the Forum """

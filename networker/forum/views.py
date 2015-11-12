@@ -8,7 +8,6 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
-
 from .models import *
 
 
@@ -41,9 +40,7 @@ class ThreadUpdate(UpdateView):
         return Thread.objects.get(slug=self.kwargs['thread'])
 
     model = Thread
-    # fields = '__all__'
     fields = ['title']
-    # success_url = '/users/'
     section = "Topic"
     title = 'update'
     button = 'Update'
@@ -59,7 +56,6 @@ class CreateThread(CreateView):
     """ Creates a thread for a forum """
     model = Thread
     fields = '__all__'
-    # success_url = '/'
     title = 'add'
     section = 'Add New Topic'
     button = 'Add'
@@ -69,96 +65,3 @@ class CreateThread(CreateView):
             'creator': self.request.user, 
             'forum': Forum
         }
-
-    # def get_success_url(self):
-    #     return reverse('listing_phone', kwargs={
-    #         'pk': self.object.user_id.pk,
-    #     })
-
-
-# ----------------------------------------------------------------------unused
-# def thread_list(request, pk):
-# 	""" Listing of threads in a forum """
-# 	threads = Thread.objects.filter(forum=pk).order_by("-created")
-# 	threads = mk_paginator(request, threads, 20)
-
-# 	# gets the specific thread
-# 	def get_object(self, queryset=None):
-# 	    return Thread.objects.get(pk=self.kwargs['thread'])
-	
-# 	return render(request, 'forum/thread_list.html', {'threads': threads, 'pk': pk})
-
-
-# class ThreadListing(ListView):
-#     """ Listing of threads in a forum """
-#     model = Thread
-
-#     # def get_success_url(self):
-#     #     return reverse('post_list', kwargs={
-#     #         'thread': self.object.pk,
-#     #     })
-
-
-# class PostListing(ListView):
-#     """ Listing of posts in a thread """
-#     model = Post
-    
-
-# def post_list_old(request, pk):
-# 	""" Listing of posts in a thread """
-# 	posts = Post.objects.filter(thread=pk).order_by('created')
-# 	posts = mk_paginator(request, posts, 15)
-# 	# title = Thread.objects.get(pk=pk).title
-# 	# t = Thread.objects.get(pk=pk)
-
-# 	# gets the specific thread
-# 	def get_object(self, queryset=None):
-# 	    return Thread.objects.get(pk=self.kwargs['thread'])
-
-	# # gets the specific post
-	# def get_object(self, queryset=None):
-	#     return Post.objects.get(pk=self.kwargs['post'])
-
-	# return render(request, 'forum/post_list.html', {'posts': posts, 'pk': pk})
-
-
-# def post(request, ptype, pk):
-# 	""" Displays a post form """ 
-# 	action = reverse('views.{}'.format(ptype), args=[pk])
-# 	if ptype == 'new_thread':
-# 	    title = 'Start New Topic'
-# 	    subject = ''
-# 	elif ptype == 'reply':
-# 	    title = 'Reply'
-# 	    subject = 'Re: ' + Thread.objects.get(pk=pk).title
-
-# 	return render('forum/post.html', add_csrf(request, subject=subject, action=action, title=title))
-
-
-# def new_thread(request, pk):
-# 	""" Start a new thread """
-# 	p = request.POST
-# 	if p['subject'] and p['body']:
-# 	    forum = Forum.objects.get(pk=pk)
-# 	    thread = Thread.objects.create(forum=forum, title=p['subject'], creator=request.user)
-# 	    Post.objects.create(thread=thread, title=p['subject'], body=p['body'], creator=request.user)
-# 	return HttpResponseRedirect(reverse('networker.networker.views.forum', args=[pk]))
-
-
-# def reply(request, pk):
-# 	""" Reply to a thread """
-# 	p = request.POST
-# 	if p['body']:
-# 		thread = Thread.objects.get(pk=pk)
-# 		post = Post.objects.create(thread=thread, title=p['subject'], body=p['body'],
-# 	        creator=request.user)
-# 	return HttpResponseRedirect(reverse('views.thread', args=[pk]) + '?page=last')
-
-
-# def add_csrf(request, **kwargs):
-# 	""" Add CSRF to dictionary """ 
-# 	d = dict(user=request.user, **kwargs)
-# 	d.update(csrf(request))
-# 	return d
-
-
